@@ -571,6 +571,14 @@ extern const struct _mp_obj_module_t ustack_module;
 #define RE_MODULE
 #endif
 
+#if CIRCUITPY_MYMODULE
+extern const struct _mp_obj_module_t mymodule_module;
+#define MYMODULE_MODULE         { MP_OBJ_NEW_QSTR(MP_QSTR_mymodule), (mp_obj_t)&mymodule_module },
+#else
+#define MYMODULE_MODULE
+#endif
+
+
 // Define certain native modules with weak links so they can be replaced with Python
 // implementations. This list may grow over time.
 #define MICROPY_PORT_BUILTIN_MODULE_WEAK_LINKS \
@@ -635,6 +643,7 @@ extern const struct _mp_obj_module_t ustack_module;
     USB_HID_MODULE \
     USB_MIDI_MODULE \
     USTACK_MODULE \
+    MYMODULE_MODULE \
 
 // If weak links are enabled, just include strong links in the main list of modules,
 // and also include the underscore alternate names.

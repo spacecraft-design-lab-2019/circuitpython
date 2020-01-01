@@ -226,6 +226,10 @@ endif
 ifeq ($(CIRCUITPY_PEW),1)
 SRC_PATTERNS += _pew/%
 endif
+ifeq ($(CIRCUITPY_MYMODULE),1)
+SRC_PATTERNS += mymodule/%
+endif
+
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS in SRC_COMMON_HAL
 SRC_COMMON_HAL_ALL = \
@@ -279,7 +283,8 @@ SRC_COMMON_HAL_ALL = \
 	rtc/__init__.c \
 	supervisor/Runtime.c \
 	supervisor/__init__.c \
-	time/__init__.c
+	time/__init__.c \
+
 
 SRC_COMMON_HAL = $(filter $(SRC_PATTERNS), $(SRC_COMMON_HAL_ALL))
 
@@ -358,7 +363,9 @@ SRC_SHARED_MODULE_ALL = \
 	uheap/__init__.c \
 	ustack/__init__.c \
 	_pew/__init__.c \
-	_pew/PewPew.c
+	_pew/PewPew.c \
+	mymodule/__init__.c \
+	mymodule/MyClass.c 
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
 SRC_SHARED_MODULE = $(filter $(SRC_PATTERNS), $(SRC_SHARED_MODULE_ALL))
