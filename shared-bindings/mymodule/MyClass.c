@@ -20,10 +20,11 @@
 
 
 STATIC mp_obj_t mymodule_myclass_make_new(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-  mp_arg_check_num(n_args, kw_args, 0, 0, true);
+  mp_arg_check_num(n_args, kw_args, 1, 1, true);
     mymodule_myclass_obj_t *self = m_new_obj(mymodule_myclass_obj_t);
     self->base.type = &mymodule_myclass_type;
-    shared_module_mymodule_myclass_construct(self);
+    int8_t input = mp_obj_get_int(pos_args[0]);
+    shared_module_mymodule_myclass_construct(self, input);
     return MP_OBJ_FROM_PTR(self);
 }
 
@@ -63,7 +64,19 @@ STATIC mp_obj_t mymodule_myclass_obj_get_question(mp_obj_t self_in) {
   char *str = shared_module_mymodule_myclass_get_question(self_in);
   return mp_obj_new_str(str, strlen(str));
 }
+
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_question_obj, mymodule_myclass_obj_get_question);
+
+//|   .. attribute:: author
+//|
+//|     Who wrote this?
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_author(mp_obj_t self_in) {
+  char *str = shared_module_mymodule_myclass_get_author(self_in);
+  return mp_obj_new_str(str, strlen(str));
+}
+
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_author_obj, mymodule_myclass_obj_get_author);
  
 //|   .. attribute:: answer
 //|
@@ -74,6 +87,16 @@ STATIC mp_obj_t mymodule_myclass_obj_get_answer(mp_obj_t self_in) {
   return mp_obj_new_int(shared_module_mymodule_myclass_get_answer(self_in));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_answer_obj, mymodule_myclass_obj_get_answer);
+
+//|   .. attribute:: square
+//|
+//|
+//|     this squares an integer input
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_square(mp_obj_t self_in) {
+  return mp_obj_new_int(shared_module_mymodule_myclass_get_square(self_in));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_square_obj, mymodule_myclass_obj_get_square);
 
 const mp_obj_property_t mymodule_myclass_question_obj = {
     .base.type = &mp_type_property,
@@ -86,6 +109,18 @@ const mp_obj_property_t mymodule_myclass_answer_obj = {
     .proxy = {(mp_obj_t)&mymodule_myclass_get_answer_obj,
               (mp_obj_t)&mp_const_none_obj},
 };
+
+const mp_obj_property_t mymodule_myclass_author_obj = {
+	.base.type = &mp_type_property,
+	.proxy = {(mp_obj_t)&mymodule_myclass_get_author_obj,
+			  (mp_obj_t)&mp_const_none_obj},
+};
+
+const mp_obj_property_t mymodule_myclass_square_obj = {
+	.base.type = &mp_type_property,
+	.proxy = {(mp_obj_t)&mymodule_myclass_get_square_obj,
+			  (mp_obj_t)&mp_const_none_obj},
+};
  
 STATIC const mp_rom_map_elem_t mymodule_myclass_locals_dict_table[] = {
     // Methods
@@ -94,6 +129,9 @@ STATIC const mp_rom_map_elem_t mymodule_myclass_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&mymodule_myclass___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_question), MP_ROM_PTR(&mymodule_myclass_question_obj) },
     { MP_ROM_QSTR(MP_QSTR_answer), MP_ROM_PTR(&mymodule_myclass_answer_obj) },
+    { MP_ROM_QSTR(MP_QSTR_author), MP_ROM_PTR(&mymodule_myclass_author_obj) },
+    { MP_ROM_QSTR(MP_QSTR_square), MP_ROM_PTR(&mymodule_myclass_square_obj) },
+
 };
 STATIC MP_DEFINE_CONST_DICT(mymodule_myclass_locals_dict, mymodule_myclass_locals_dict_table);
  
