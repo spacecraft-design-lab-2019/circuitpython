@@ -67,6 +67,7 @@ def generate_module_table_header(modules):
         mod_def = "MODULE_DEF_{}".format(module_name.upper())
         mod_defs.append(mod_def)
         print((
+            "#define MODULE_ULAB_ENABLED (1)\n"
             "#if ({enabled_define})\n"
             "    extern const struct _mp_obj_module_t {obj_module};\n"
             "    #define {mod_def} {{ MP_ROM_QSTR({module_name}), MP_ROM_PTR(&{obj_module}) }},\n"

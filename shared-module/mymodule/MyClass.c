@@ -27,5 +27,5 @@ const char * shared_module_mymodule_myclass_get_author(mymodule_myclass_obj_t* s
 }
 
 mp_int_t shared_module_mymodule_myclass_get_square(mymodule_myclass_obj_t* self) {
-	return self->input;
+	return self->input*self->input;
 }

@@ -229,7 +229,9 @@ endif
 ifeq ($(CIRCUITPY_MYMODULE),1)
 SRC_PATTERNS += mymodule/%
 endif
-
+ifeq ($(CIRCUITPY_ULAB),1)
+SRC_PATTERNS += ulab/%
+endif
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS in SRC_COMMON_HAL
 SRC_COMMON_HAL_ALL = \
@@ -284,6 +286,7 @@ SRC_COMMON_HAL_ALL = \
 	supervisor/Runtime.c \
 	supervisor/__init__.c \
 	time/__init__.c \
+	
 
 
 SRC_COMMON_HAL = $(filter $(SRC_PATTERNS), $(SRC_COMMON_HAL_ALL))
@@ -365,7 +368,9 @@ SRC_SHARED_MODULE_ALL = \
 	_pew/__init__.c \
 	_pew/PewPew.c \
 	mymodule/__init__.c \
-	mymodule/MyClass.c 
+	mymodule/MyClass.c \
+	ulab/__init__.c \
+	ulab/ndarray.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
 SRC_SHARED_MODULE = $(filter $(SRC_PATTERNS), $(SRC_SHARED_MODULE_ALL))

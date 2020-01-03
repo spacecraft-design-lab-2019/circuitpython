@@ -18,3 +18,4 @@ const mp_obj_module_t mymodule_module = {
     .base = { &mp_type_module },
     .globals = (mp_obj_dict_t*)&mymodule_module_globals,
 };
+
