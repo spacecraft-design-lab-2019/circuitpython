@@ -371,6 +371,7 @@ SRC_SHARED_MODULE_ALL = \
 	mymodule/MyClass.c \
 	ulab/__init__.c \
 	ulab/ndarray.c \
+	ulab/linalg.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
 SRC_SHARED_MODULE = $(filter $(SRC_PATTERNS), $(SRC_SHARED_MODULE_ALL))

@@ -10,7 +10,7 @@ typedef struct {
 } mp_obj_float_t;
 
 typedef struct {
-	bool deinited;
+	//bool deinited;
     mp_obj_base_t base;
     size_t m, n;
     size_t len;

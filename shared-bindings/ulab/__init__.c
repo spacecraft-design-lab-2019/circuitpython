@@ -16,21 +16,35 @@
 #include "py/binary.h"
 #include "py/obj.h"
 #include "py/objarray.h"
+#include "lib/utils/context_manager_helpers.h"
+#include "py/objproperty.h"
+#include "py/runtime.h"
+#include "shared-bindings/util.h"
 
 #include "shared-bindings/ulab/__init__.h"
 #include "shared-bindings/ulab/ndarray.h"
+#include "shared-bindings/ulab/linalg.h"
 
-#define ULAB_VERSION 0.262
+const char *ulab_version = "0.262";
 
-mp_obj_float_t ulab_version = {{&mp_type_float}, ULAB_VERSION};
 
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_ndarray_shape_obj, ulab_ndarray_shape);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_ndarray_copy_obj, ulab_ndarray_copy);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_ndarray_rawsize_obj, ulab_ndarray_rawsize);
+MP_DEFINE_CONST_FUN_OBJ_KW(ulab_ndarray_flatten_obj, 1, ulab_ndarray_flatten);
+
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_transpose_obj, ulab_linalg_transpose);
+MP_DEFINE_CONST_FUN_OBJ_2(ulab_linalg_reshape_obj, ulab_linalg_reshape);
+MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_size_obj, 1, ulab_linalg_size);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_inv_obj, ulab_linalg_inv);
 
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_shape), MP_ROM_PTR(&ulab_ndarray_shape_obj) },
-    //{ MP_ROM_QSTR(MP_QSTR_rawsize), MP_ROM_PTR(&ndarray_rawsize_obj) },
-    //{ MP_ROM_QSTR(MP_QSTR_flatten), MP_ROM_PTR(&ndarray_flatten_obj) },    
-    //{ MP_ROM_QSTR(MP_QSTR_asbytearray), MP_ROM_PTR(&ndarray_asbytearray_obj) },
+    { MP_ROM_QSTR(MP_QSTR_copy), MP_ROM_PTR(&ulab_ndarray_copy_obj) },
+    { MP_ROM_QSTR(MP_QSTR_rawsize), MP_ROM_PTR(&ulab_ndarray_rawsize_obj) },
+    { MP_ROM_QSTR(MP_QSTR_flatten), MP_ROM_PTR(&ulab_ndarray_flatten_obj) },    
+    { MP_ROM_QSTR(MP_QSTR_transpose), MP_ROM_PTR(&ulab_linalg_transpose_obj) },
+    { MP_ROM_QSTR(MP_QSTR_reshape), MP_ROM_PTR(&ulab_linalg_reshape_obj) },
 };
 
 STATIC MP_DEFINE_CONST_DICT(ulab_ndarray_locals_dict, ulab_ndarray_locals_dict_table);
@@ -40,6 +54,10 @@ const mp_obj_type_t ulab_ndarray_type = {
     .name = MP_QSTR_ndarray,
     .print = ulab_ndarray_print,
     .make_new = ulab_ndarray_make_new,
+    .subscr = ulab_ndarray_subscr,
+    .getiter = ulab_ndarray_getiter,
+    .unary_op = ulab_ndarray_unary_op,
+    .binary_op = ulab_ndarray_binary_op,
     .locals_dict = (mp_obj_dict_t*)&ulab_ndarray_locals_dict,
 };
 
@@ -47,6 +65,9 @@ STATIC const mp_rom_map_elem_t ulab_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_OBJ_NEW_QSTR(MP_QSTR_ulab) },
     { MP_ROM_QSTR(MP_QSTR___version__), MP_ROM_PTR(&ulab_version) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_array), (mp_obj_t)&ulab_ndarray_type },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_size), (mp_obj_t)&ulab_linalg_size_obj },
+    { MP_OBJ_NEW_QSTR(MP_QSTR_inv), (mp_obj_t)&ulab_linalg_inv_obj },
+    //class constants
     { MP_ROM_QSTR(MP_QSTR_uint8), MP_ROM_INT(NDARRAY_UINT8) },
     { MP_ROM_QSTR(MP_QSTR_int8), MP_ROM_INT(NDARRAY_INT8) },
     { MP_ROM_QSTR(MP_QSTR_uint16), MP_ROM_INT(NDARRAY_UINT16) },
