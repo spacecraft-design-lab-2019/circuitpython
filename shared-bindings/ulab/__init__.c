@@ -37,6 +37,13 @@ MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_transpose_obj, ulab_linalg_transpose);
 MP_DEFINE_CONST_FUN_OBJ_2(ulab_linalg_reshape_obj, ulab_linalg_reshape);
 MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_size_obj, 1, ulab_linalg_size);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_inv_obj, ulab_linalg_inv);
+MP_DEFINE_CONST_FUN_OBJ_2(ulab_linalg_dot_obj, ulab_linalg_dot);
+MP_DEFINE_CONST_FUN_OBJ_2(ulab_linalg_cross_obj, ulab_linalg_cross);
+MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_zeros_obj, 0, ulab_linalg_zeros);
+MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_ones_obj, 0, ulab_linalg_ones);
+MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_eye_obj, 0, ulab_linalg_eye);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_det_obj, ulab_linalg_det);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_eig_obj, ulab_linalg_eig);
 
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_shape), MP_ROM_PTR(&ulab_ndarray_shape_obj) },
@@ -45,6 +52,7 @@ STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_flatten), MP_ROM_PTR(&ulab_ndarray_flatten_obj) },    
     { MP_ROM_QSTR(MP_QSTR_transpose), MP_ROM_PTR(&ulab_linalg_transpose_obj) },
     { MP_ROM_QSTR(MP_QSTR_reshape), MP_ROM_PTR(&ulab_linalg_reshape_obj) },
+
 };
 
 STATIC MP_DEFINE_CONST_DICT(ulab_ndarray_locals_dict, ulab_ndarray_locals_dict_table);
@@ -67,6 +75,14 @@ STATIC const mp_rom_map_elem_t ulab_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_array), (mp_obj_t)&ulab_ndarray_type },
     { MP_OBJ_NEW_QSTR(MP_QSTR_size), (mp_obj_t)&ulab_linalg_size_obj },
     { MP_OBJ_NEW_QSTR(MP_QSTR_inv), (mp_obj_t)&ulab_linalg_inv_obj },
+    { MP_ROM_QSTR(MP_QSTR_dot), (mp_obj_t)&ulab_linalg_dot_obj },
+    { MP_ROM_QSTR(MP_QSTR_cross), (mp_obj_t)&ulab_linalg_cross_obj },
+    { MP_ROM_QSTR(MP_QSTR_zeros), (mp_obj_t)&ulab_linalg_zeros_obj },
+    { MP_ROM_QSTR(MP_QSTR_ones), (mp_obj_t)&ulab_linalg_ones_obj },
+    { MP_ROM_QSTR(MP_QSTR_eye), (mp_obj_t)&ulab_linalg_eye_obj },
+    { MP_ROM_QSTR(MP_QSTR_det), (mp_obj_t)&ulab_linalg_det_obj },
+    { MP_ROM_QSTR(MP_QSTR_eig), (mp_obj_t)&ulab_linalg_eig_obj },   
+
     //class constants
     { MP_ROM_QSTR(MP_QSTR_uint8), MP_ROM_INT(NDARRAY_UINT8) },
     { MP_ROM_QSTR(MP_QSTR_int8), MP_ROM_INT(NDARRAY_INT8) },

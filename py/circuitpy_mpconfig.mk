@@ -184,7 +184,7 @@ CIRCUITPY_NEOPIXEL_WRITE = $(CIRCUITPY_DEFAULT_BUILD)
 endif
 CFLAGS += -DCIRCUITPY_NEOPIXEL_WRITE=$(CIRCUITPY_NEOPIXEL_WRITE)
 
-# Enabled on SAMD51. Won't fit on SAMD21 builds. Not tested on nRF or STM32F4 builds.
+#Enabled on SAMD51. Won't fit on SAMD21 builds. Not tested on nRF or STM32F4 builds.
 ifndef CIRCUITPY_NETWORK
 CIRCUITPY_NETWORK = 0
 endif

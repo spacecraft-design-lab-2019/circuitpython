@@ -102,11 +102,11 @@ endif
 ifeq ($(CIRCUITPY_ANALOGIO),1)
 SRC_PATTERNS += analogio/%
 endif
-ifeq ($(CIRCUITPY_AUDIOBUSIO),1)
-SRC_PATTERNS += audiobusio/%
-endif
 ifeq ($(CIRCUITPY_AUDIOIO),1)
 SRC_PATTERNS += audioio/%
+endif
+ifeq ($(CIRCUITPY_AUDIOBUSIO),1)
+SRC_PATTERNS += audiobusio/%
 endif
 ifeq ($(CIRCUITPY_AUDIOPWMIO),1)
 SRC_PATTERNS += audiopwmio/%
@@ -235,6 +235,9 @@ endif
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS in SRC_COMMON_HAL
 SRC_COMMON_HAL_ALL = \
+	audiobusio/__init__.c \
+	audiobusio/I2SOut.c \
+	audiobusio/PDMIn.c \
 	_bleio/__init__.c \
 	_bleio/Adapter.c \
 	_bleio/Attribute.c \
@@ -247,9 +250,6 @@ SRC_COMMON_HAL_ALL = \
 	analogio/AnalogIn.c \
 	analogio/AnalogOut.c \
 	analogio/__init__.c \
-	audiobusio/__init__.c \
-	audiobusio/I2SOut.c \
-	audiobusio/PDMIn.c \
 	audiopwmio/__init__.c \
 	audiopwmio/PWMAudioOut.c \
 	audioio/__init__.c \
@@ -358,7 +358,6 @@ SRC_SHARED_MODULE_ALL = \
 	os/__init__.c \
 	random/__init__.c \
 	socket/__init__.c \
-	network/__init__.c \
 	storage/__init__.c \
 	struct/__init__.c \
 	terminalio/Terminal.c \
@@ -372,6 +371,7 @@ SRC_SHARED_MODULE_ALL = \
 	ulab/__init__.c \
 	ulab/ndarray.c \
 	ulab/linalg.c \
+	network/__init__.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
 SRC_SHARED_MODULE = $(filter $(SRC_PATTERNS), $(SRC_SHARED_MODULE_ALL))

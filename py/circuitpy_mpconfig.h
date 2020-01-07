@@ -605,7 +605,7 @@ extern const struct _mp_obj_module_t mymodule_module;
 // Some are omitted because they're in MICROPY_PORT_BUILTIN_MODULE_WEAK_LINKS above.
 #define MICROPY_PORT_BUILTIN_MODULES_STRONG_LINKS \
     ANALOGIO_MODULE \
-    AUDIOBUSIO_MODULE \
+    ANALOGIO_MODULE \
     AUDIOCORE_MODULE \
     AUDIOIO_MODULE \
     AUDIOMIXER_MODULE \

@@ -23,5 +23,13 @@ mp_obj_t ulab_linalg_size(size_t , const mp_obj_t *, mp_map_t *);
 
 bool ulab_linalg_invert_matrix(mp_float_t *, size_t );
 mp_obj_t ulab_linalg_inv(mp_obj_t );
+mp_obj_t ulab_linalg_dot(mp_obj_t , mp_obj_t );
+mp_obj_t ulab_linalg_cross(mp_obj_t , mp_obj_t );
+mp_obj_t ulab_linalg_zeros(size_t , const mp_obj_t *, mp_map_t *);
+mp_obj_t ulab_linalg_ones(size_t , const mp_obj_t *, mp_map_t *);
+mp_obj_t ulab_linalg_eye(size_t , const mp_obj_t *, mp_map_t *);
+
+mp_obj_t ulab_linalg_det(mp_obj_t );
+mp_obj_t ulab_linalg_eig(mp_obj_t );
 
 #endif // MICROPY_INCLUDED_SHARED_BINDINGS_ULAB_LINALG_H

@@ -49,6 +49,10 @@ enum NDARRAY_TYPE {
     NDARRAY_FLOAT = FLOAT_TYPECODE,
 };
 
+mp_float_t ulab_ndarray_get_float_value(void *, uint8_t , size_t );
+void fill_array_iterable(mp_float_t *, mp_obj_t );
+
+
 mp_obj_t ulab_ndarray_shape(mp_obj_t );
 mp_obj_t ulab_ndarray_rawsize(mp_obj_t );
 mp_obj_t ulab_ndarray_flatten(size_t , const mp_obj_t *, mp_map_t *);
