@@ -19,6 +19,7 @@ const char * shared_module_mymodule_myclass_get_question(mymodule_myclass_obj_t*
 }
  
 mp_int_t shared_module_mymodule_myclass_get_answer(mymodule_myclass_obj_t* self) {
+	
   return 42;
 }
 

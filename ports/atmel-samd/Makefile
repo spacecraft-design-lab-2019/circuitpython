@@ -156,9 +156,9 @@ CFLAGS += \
 endif
 
 
-
+#LD_LIBRARY_PATH=/Volumes/CircuitPython/circuitpython/ports/atmel-samd$LD_LIBRARY_PATH
 LDFLAGS = $(CFLAGS) -nostartfiles -fshort-enums -Wl,-nostdlib -Wl,-T,$(GENERATED_LD_FILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections -specs=nano.specs
-LIBS := -lgcc -lc
+LIBS := -lgcc -lc -ldetumble
 
 # Use toolchain libm if we're not using our own.
 ifndef INTERNAL_LIBM

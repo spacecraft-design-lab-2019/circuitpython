@@ -6,6 +6,8 @@
 #include "py/runtime0.h"
 #include "shared-bindings/mymodule/MyClass.h"
 #include "shared-bindings/util.h"
+#include "shared-bindings/mymodule/detumble_algorithms.h"
+#include <stdio.h>
 
 //| .. currentmodule:: mymodule
 //|
@@ -84,6 +86,19 @@ MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_author_obj, mymodule_myclass_obj_
 //|     The answer to the question of life, the universe and everything
 //|
 STATIC mp_obj_t mymodule_myclass_obj_get_answer(mp_obj_t self_in) {
+  int size;
+  size = 3;
+  double B_dot[size], max_dipoles[size], commanded_dipole[size];  
+
+
+
+  for (int i = 0; i < size; ++i)
+  {
+    B_dot[i] = -1.0;
+    max_dipoles[i] = 3.0;
+  }
+
+  detumble_B_dot_C(B_dot, max_dipoles, commanded_dipole);
   return mp_obj_new_int(shared_module_mymodule_myclass_get_answer(self_in));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_answer_obj, mymodule_myclass_obj_get_answer);
@@ -97,6 +112,7 @@ STATIC mp_obj_t mymodule_myclass_obj_get_square(mp_obj_t self_in) {
   return mp_obj_new_int(shared_module_mymodule_myclass_get_square(self_in));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_square_obj, mymodule_myclass_obj_get_square);
+
 
 const mp_obj_property_t mymodule_myclass_question_obj = {
     .base.type = &mp_type_property,
