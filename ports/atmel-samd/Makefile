@@ -159,6 +159,7 @@ endif
 
 LDFLAGS = $(CFLAGS) -nostartfiles -fshort-enums -Wl,-nostdlib -Wl,-T,$(GENERATED_LD_FILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections -specs=nano.specs
 LIBS := -lgcc -lc
+LIBS += -lstdc++
 
 # Use toolchain libm if we're not using our own.
 ifndef INTERNAL_LIBM

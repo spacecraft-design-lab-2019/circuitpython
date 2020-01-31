@@ -1,6 +1,6 @@
 #include "py/runtime.h"
 #include "MyClass.h"
- 
+
 void shared_module_mymodule_myclass_construct(mymodule_myclass_obj_t* self, int8_t input) {
   self->deinited = 0;
   self->input = input;
