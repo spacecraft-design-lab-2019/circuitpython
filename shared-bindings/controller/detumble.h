@@ -18,6 +18,6 @@
 #include "py/objtype.h"
 #include "py/runtime.h"
 
-uint8_t controller_detumble_test(uint8_t);
+// extern uint8_t controller_detumble_test(uint8_t);
 
 #endif // MICROPY_INCLUDED_SHARED_BINDINGS_CONTROLLER_DETUMBLE_H
