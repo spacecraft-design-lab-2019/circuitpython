@@ -88,6 +88,16 @@ STATIC mp_obj_t mymodule_myclass_obj_get_answer(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_answer_obj, mymodule_myclass_obj_get_answer);
 
+//|   .. attribute:: return input
+//|
+//|
+//|     returns the input
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_input(mp_obj_t self_in) {
+  return mp_obj_new_int(shared_module_mymodule_myclass_get_input(self_in));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_input_obj, mymodule_myclass_obj_get_input);
+
 //|   .. attribute:: square
 //|
 //|
@@ -97,6 +107,28 @@ STATIC mp_obj_t mymodule_myclass_obj_get_square(mp_obj_t self_in) {
   return mp_obj_new_int(shared_module_mymodule_myclass_get_square(self_in));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_square_obj, mymodule_myclass_obj_get_square);
+
+//|   .. attribute:: return length
+//|
+//|
+//|     returns the length
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_length(mp_obj_t self_in) {
+  return mp_obj_new_int(shared_module_mymodule_myclass_get_length(self_in));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_length_obj, mymodule_myclass_obj_get_length);
+
+//|   .. attribute:: return C (array)
+//|
+//|
+//|     returns an array
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_C(mp_obj_t self_in) {
+  size_t l = 10;
+  mp_obj_t data = shared_module_mymodule_myclass_get_C;
+  return mp_obj_new_list(l, data);
+}
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_C_obj, mymodule_myclass_obj_get_C);
 
 const mp_obj_property_t mymodule_myclass_question_obj = {
     .base.type = &mp_type_property,
@@ -116,6 +148,24 @@ const mp_obj_property_t mymodule_myclass_author_obj = {
 			  (mp_obj_t)&mp_const_none_obj},
 };
 
+const mp_obj_property_t mymodule_myclass_input_obj = {
+  .base.type = &mp_type_property,
+  .proxy = {(mp_obj_t)&mymodule_myclass_get_input_obj,
+        (mp_obj_t)&mp_const_none_obj},
+};
+
+const mp_obj_property_t mymodule_myclass_length_obj = {
+  .base.type = &mp_type_property,
+  .proxy = {(mp_obj_t)&mymodule_myclass_get_length_obj,
+        (mp_obj_t)&mp_const_none_obj},
+};
+
+const mp_obj_property_t mymodule_myclass_C_obj = {
+  .base.type = &mp_type_property,
+  .proxy = {(mp_obj_t)&mymodule_myclass_get_C_obj,
+        (mp_obj_t)&mp_const_none_obj},
+};
+
 const mp_obj_property_t mymodule_myclass_square_obj = {
 	.base.type = &mp_type_property,
 	.proxy = {(mp_obj_t)&mymodule_myclass_get_square_obj,
@@ -130,6 +180,9 @@ STATIC const mp_rom_map_elem_t mymodule_myclass_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_question), MP_ROM_PTR(&mymodule_myclass_question_obj) },
     { MP_ROM_QSTR(MP_QSTR_answer), MP_ROM_PTR(&mymodule_myclass_answer_obj) },
     { MP_ROM_QSTR(MP_QSTR_author), MP_ROM_PTR(&mymodule_myclass_author_obj) },
+    { MP_ROM_QSTR(MP_QSTR_input), MP_ROM_PTR(&mymodule_myclass_input_obj) },
+    { MP_ROM_QSTR(MP_QSTR_length), MP_ROM_PTR(&mymodule_myclass_length_obj) },
+    { MP_ROM_QSTR(MP_QSTR_C), MP_ROM_PTR(&mymodule_myclass_C_obj) },
     { MP_ROM_QSTR(MP_QSTR_square), MP_ROM_PTR(&mymodule_myclass_square_obj) },
 
 };

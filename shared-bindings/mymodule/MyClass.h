@@ -11,6 +11,9 @@ extern bool shared_module_mymodule_myclass_deinited(mymodule_myclass_obj_t* self
 extern char * shared_module_mymodule_myclass_get_question(mymodule_myclass_obj_t* self);
 extern char * shared_module_mymodule_myclass_get_author(mymodule_myclass_obj_t* self);
 extern mp_int_t shared_module_mymodule_myclass_get_answer(mymodule_myclass_obj_t* self);
+extern mp_int_t shared_module_mymodule_myclass_get_input(mymodule_myclass_obj_t* self);
+extern mp_int_t shared_module_mymodule_myclass_get_length(mymodule_myclass_obj_t* self);
+extern mp_obj_t shared_module_mymodule_myclass_get_C(mymodule_myclass_obj_t* self);
 extern mp_int_t shared_module_mymodule_myclass_get_square(mymodule_myclass_obj_t* self);
  
 #endif // MICROPY_INCLUDED_SHARED_BINDINGS_MYMODULE_MYCLASS_H

@@ -7,6 +7,8 @@ typedef struct {
   mp_obj_base_t base;
   bool deinited;
   int8_t input;
+  size_t length;
+  float C[10];
 } mymodule_myclass_obj_t;
  
  
