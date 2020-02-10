@@ -6,6 +6,8 @@
 #include "py/runtime0.h"
 #include "shared-bindings/mymodule/MyClass.h"
 #include "shared-bindings/util.h"
+#include "shared-module/ulab/ndarray.h"
+#include "shared-bindings/ulab/ndarray.h"
 
 //| .. currentmodule:: mymodule
 //|
@@ -20,11 +22,12 @@
 
 
 STATIC mp_obj_t mymodule_myclass_make_new(const mp_obj_type_t *type, size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-  mp_arg_check_num(n_args, kw_args, 1, 1, true);
+  mp_arg_check_num(n_args, kw_args, 0, 2, true);
     mymodule_myclass_obj_t *self = m_new_obj(mymodule_myclass_obj_t);
     self->base.type = &mymodule_myclass_type;
     int8_t input = mp_obj_get_int(pos_args[0]);
-    shared_module_mymodule_myclass_construct(self, input);
+    ulab_ndarray_obj_t *my_ulab_array = MP_OBJ_TO_PTR(pos_args[0]);
+    shared_module_mymodule_myclass_construct(self, input, *my_ulab_array);
     return MP_OBJ_FROM_PTR(self);
 }
 
