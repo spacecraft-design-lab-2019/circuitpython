@@ -21,13 +21,15 @@
 #include "shared-bindings/ulab/linalg.h"
 #include "shared-bindings/ulab/ndarray.h"
 
-/*void bdot_law(uint8_t c[], uint8_t length) {
+void bdot_law(mp_float_t *c, size_t length) {
 	// this function takes in an array of the bdot and magnetic moment
 	// and modifies the moment in place
 	
+    for(size_t i=0; i < length; i++) {
+        c[i] = -c[i];
+    }
 
-}*/
-
+}
 
 mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
     ulab_ndarray_obj_t *self = MP_OBJ_TO_PTR(self_in); 
@@ -38,11 +40,9 @@ mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
     // NOTE: 
     // we assume that the array passed in is of the form [u[1:3],Bdot[1:3]]
     mp_float_t *c = (mp_float_t *)self->array->items;
+    size_t a = 6;
+    bdot_law(c, a);       
 
-    for(size_t i=0; i < self->array->len; i++) {
-    	c[i] = -c[i];
-    }
-            
     return MP_OBJ_FROM_PTR(self);
 
 }
