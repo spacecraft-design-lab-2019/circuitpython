@@ -371,6 +371,7 @@ SRC_SHARED_MODULE_ALL = \
 	ulab/__init__.c \
 	ulab/ndarray.c \
 	ulab/linalg.c \
+	ulab/controller.c \
 	network/__init__.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.

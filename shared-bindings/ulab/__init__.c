@@ -24,6 +24,7 @@
 #include "shared-bindings/ulab/__init__.h"
 #include "shared-bindings/ulab/ndarray.h"
 #include "shared-bindings/ulab/linalg.h"
+#include "shared-bindings/ulab/controller.h"
 
 const char *ulab_version = "0.262";
 
@@ -34,6 +35,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(ulab_ndarray_rawsize_obj, ulab_ndarray_rawsize);
 MP_DEFINE_CONST_FUN_OBJ_KW(ulab_ndarray_flatten_obj, 1, ulab_ndarray_flatten);
 
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_transpose_obj, ulab_linalg_transpose);
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_zeroed_obj, ulab_linalg_zeroed);
 MP_DEFINE_CONST_FUN_OBJ_2(ulab_linalg_reshape_obj, ulab_linalg_reshape);
 MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_size_obj, 1, ulab_linalg_size);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_inv_obj, ulab_linalg_inv);
@@ -45,13 +47,18 @@ MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_eye_obj, 0, ulab_linalg_eye);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_det_obj, ulab_linalg_det);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_eig_obj, ulab_linalg_eig);
 
+MP_DEFINE_CONST_FUN_OBJ_1(ulab_controller_bdot_obj, ulab_controller_bdot);
+
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_shape), MP_ROM_PTR(&ulab_ndarray_shape_obj) },
     { MP_ROM_QSTR(MP_QSTR_copy), MP_ROM_PTR(&ulab_ndarray_copy_obj) },
     { MP_ROM_QSTR(MP_QSTR_rawsize), MP_ROM_PTR(&ulab_ndarray_rawsize_obj) },
     { MP_ROM_QSTR(MP_QSTR_flatten), MP_ROM_PTR(&ulab_ndarray_flatten_obj) },    
     { MP_ROM_QSTR(MP_QSTR_transpose), MP_ROM_PTR(&ulab_linalg_transpose_obj) },
+    { MP_ROM_QSTR(MP_QSTR_zeroed), MP_ROM_PTR(&ulab_linalg_zeroed_obj) },
     { MP_ROM_QSTR(MP_QSTR_reshape), MP_ROM_PTR(&ulab_linalg_reshape_obj) },
+
+    { MP_ROM_QSTR(MP_QSTR_bdot), MP_ROM_PTR(&ulab_controller_bdot_obj) },
 
 };
 
