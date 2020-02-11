@@ -25,8 +25,10 @@ void bdot_law(mp_float_t *c, size_t length) {
 	// this function takes in an array of the bdot and magnetic moment
 	// and modifies the moment in place
 	
+    float K = 20;
+
     for(size_t i=0; i < length; i++) {
-        c[i] = -c[i];
+        c[i] = -K*c[i];
     }
 
 }
