@@ -133,6 +133,19 @@ STATIC mp_obj_t mymodule_myclass_obj_get_C(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_C_obj, mymodule_myclass_obj_get_C);
 
+
+
+//|   .. attribute:: return the ulab array native to the class(array)
+//|
+//|
+//|     returns an array
+//|
+STATIC mp_obj_t mymodule_myclass_obj_get_ulabArray(mp_obj_t self_in) {
+  return shared_module_mymodule_myclass_get_ulabArray(self_in);
+}
+
+MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_ulabArray_obj, mymodule_myclass_obj_get_ulabArray);
+
 const mp_obj_property_t mymodule_myclass_question_obj = {
     .base.type = &mp_type_property,
     .proxy = {(mp_obj_t)&mymodule_myclass_get_question_obj,
@@ -169,6 +182,12 @@ const mp_obj_property_t mymodule_myclass_C_obj = {
         (mp_obj_t)&mp_const_none_obj},
 };
 
+const mp_obj_property_t mymodule_myclass_ulabArray_obj = {
+  .base.type = &mp_type_property,
+  .proxy = {(mp_obj_t)&mymodule_myclass_get_ulabArray_obj,
+        (mp_obj_t)&mp_const_none_obj},
+};
+
 const mp_obj_property_t mymodule_myclass_square_obj = {
 	.base.type = &mp_type_property,
 	.proxy = {(mp_obj_t)&mymodule_myclass_get_square_obj,
@@ -186,6 +205,7 @@ STATIC const mp_rom_map_elem_t mymodule_myclass_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_input), MP_ROM_PTR(&mymodule_myclass_input_obj) },
     { MP_ROM_QSTR(MP_QSTR_length), MP_ROM_PTR(&mymodule_myclass_length_obj) },
     { MP_ROM_QSTR(MP_QSTR_C), MP_ROM_PTR(&mymodule_myclass_C_obj) },
+    { MP_ROM_QSTR(MP_QSTR_ulabArray), MP_ROM_PTR(&mymodule_myclass_ulabArray_obj) },
     { MP_ROM_QSTR(MP_QSTR_square), MP_ROM_PTR(&mymodule_myclass_square_obj) },
 
 };

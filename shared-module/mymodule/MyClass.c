@@ -5,13 +5,18 @@
 
 void get_array(float *C);
 
-void shared_module_mymodule_myclass_construct(mymodule_myclass_obj_t* self, int8_t input, ulab_ndarray_obj_t my_ulab_array) {
+void shared_module_mymodule_myclass_construct(mymodule_myclass_obj_t* self, int8_t input, ulab_ndarray_obj_t input_ulab_array) {
   self->deinited = 0;
   self->input = input;
   self->length = 10;
   get_array(self->C);
   // Load in data from ulab array
-  // ulab_ndarray_obj_t *my_ulab_array = MP_OBJ_TO_PTR(my_ulab_array);
+  ulab_ndarray_obj_t* my_ulab_array = MP_OBJ_TO_PTR(input_ulab_array);
+  self->my_ulab_array = my_ulab_array;
+}
+
+ulab_ndarray_obj_t shared_module_mymodule_myclass_get_ulabArray(mymodule_myclass_obj_t* self){
+	return self->my_ulab_array;
 }
 
 bool shared_module_mymodule_myclass_deinited(mymodule_myclass_obj_t* self) {
