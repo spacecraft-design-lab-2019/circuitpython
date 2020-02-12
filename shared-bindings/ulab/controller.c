@@ -33,6 +33,102 @@ void bdot_law(mp_float_t *c, size_t length) {
 
 }
 
+void cholesky(const double A_data[], const int A_size[2], double R_data[], int R_size[2])
+{
+  int jmax;
+  int n;
+  int info;
+  int j;
+  boolean_T exitg1;
+  int idxAjj;
+  double ssq;
+  int ix;
+  int iy;
+  int i;
+  int idxAjp1j;
+  int b_i;
+  int iac;
+  double c;
+  int i1;
+  int ia;
+  R_size[0] = A_size[0];
+  R_size[1] = A_size[1];
+  jmax = A_size[0] * A_size[1];
+  if (0 <= jmax - 1) {
+    memcpy(&R_data[0], &A_data[0], jmax * sizeof(double));
+  }
+
+  n = A_size[1];
+  if (A_size[1] != 0) {
+    info = 0;
+    j = 0;
+    exitg1 = false;
+    while ((!exitg1) && (j <= n - 1)) {
+      idxAjj = j + j * n;
+      ssq = 0.0;
+      if (j >= 1) {
+        ix = j;
+        iy = j;
+        for (jmax = 0; jmax < j; jmax++) {
+          ssq += R_data[ix] * R_data[iy];
+          ix += n;
+          iy += n;
+        }
+      }
+
+      ssq = R_data[idxAjj] - ssq;
+      if (ssq > 0.0) {
+        ssq = sqrt(ssq);
+        R_data[idxAjj] = ssq;
+        if (j + 1 < n) {
+          jmax = (n - j) - 1;
+          i = j + 2;
+          idxAjp1j = idxAjj + 2;
+          if ((jmax != 0) && (j != 0)) {
+            ix = j;
+            b_i = (j + n * (j - 1)) + 2;
+            for (iac = i; n < 0 ? iac >= b_i : iac <= b_i; iac += n) {
+              c = -R_data[ix];
+              iy = idxAjj + 1;
+              i1 = (iac + jmax) - 1;
+              for (ia = iac; ia <= i1; ia++) {
+                R_data[iy] += R_data[ia - 1] * c;
+                iy++;
+              }
+
+              ix += n;
+            }
+          }
+
+          ssq = 1.0 / ssq;
+          b_i = idxAjj + jmax;
+          for (jmax = idxAjp1j; jmax <= b_i + 1; jmax++) {
+            R_data[jmax - 1] *= ssq;
+          }
+        }
+
+        j++;
+      } else {
+        R_data[idxAjj] = ssq;
+        info = j + 1;
+        exitg1 = true;
+      }
+    }
+
+    if (info == 0) {
+      jmax = A_size[1];
+    } else {
+      jmax = info - 1;
+    }
+
+    for (j = 2; j <= jmax; j++) {
+      for (i = 0; i <= j - 2; i++) {
+        R_data[i + R_size[0] * (j - 1)] = 0.0;
+      }
+    }
+  }
+}
+
 mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
     ulab_ndarray_obj_t *self = MP_OBJ_TO_PTR(self_in); 
     // this passes in the array
@@ -42,6 +138,7 @@ mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
     // NOTE: 
     // we assume that the array passed in is of the form [u[1:3],Bdot[1:3]]
     mp_float_t *c = (mp_float_t *)self->array->items;
+
     size_t a = 6;
     bdot_law(c, a);       
 
@@ -49,3 +146,25 @@ mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
 
 }
 
+mp_obj_t ulab_controller_cholesky(mp_obj_t A_input, mp_obj_t R_input) {
+    ulab_ndarray_obj_t *A_obj = MP_OBJ_TO_PTR(A_input);
+    ulab_ndarray_obj_t *R_obj = MP_OBJ_TO_PTR(R_input);
+
+    // this passes in the array
+    // the size of a single item in the array
+    //uint8_t _sizeof = mp_binary_get_size('@', self->array->typecode, NULL);
+    
+    // NOTE: 
+    // we assume that the array passed in is of the form [u[1:3],Bdot[1:3]]
+    mp_float_t *A = (mp_float_t *)A_obj->array->items;
+    mp_float_t *R = (mp_float_t *)R_obj->array->items;
+
+
+    size_t a = 2;
+
+    // TODO: convert to mp_obj types
+    cholesky(const double A_data[], const int A_size[2], double R_data[], int R_size[2])
+
+    return MP_OBJ_FROM_PTR(R_obj);
+
+}
