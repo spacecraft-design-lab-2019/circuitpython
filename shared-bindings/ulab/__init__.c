@@ -47,7 +47,10 @@ MP_DEFINE_CONST_FUN_OBJ_KW(ulab_linalg_eye_obj, 0, ulab_linalg_eye);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_det_obj, ulab_linalg_det);
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_eig_obj, ulab_linalg_eig);
 
+// Stanford student stuff
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_controller_bdot_obj, ulab_controller_bdot);
+MP_DEFINE_CONST_FUN_OBJ_2(ulab_controller_cholesky_obj, ulab_controller_cholesky);
+
 //this is if you want to modify an array in place
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_shape), MP_ROM_PTR(&ulab_ndarray_shape_obj) },
@@ -58,8 +61,9 @@ STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_zeroed), MP_ROM_PTR(&ulab_linalg_zeroed_obj) },
     { MP_ROM_QSTR(MP_QSTR_reshape), MP_ROM_PTR(&ulab_linalg_reshape_obj) },
 
+    // Stanford student stuff
     { MP_ROM_QSTR(MP_QSTR_bdot), MP_ROM_PTR(&ulab_controller_bdot_obj) },
-
+    { MP_ROM_QSTR(MP_QSTR_cholesky), MP_ROM_PTR(&ulab_controller_cholesky_obj) },
 };
 
 STATIC MP_DEFINE_CONST_DICT(ulab_ndarray_locals_dict, ulab_ndarray_locals_dict_table);

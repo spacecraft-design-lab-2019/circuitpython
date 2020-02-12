@@ -78,7 +78,7 @@ void cholesky(const mp_float_t A_data[], const size_t A_size[2], mp_float_t R_da
 
       ssq = R_data[idxAjj] - ssq;
       if (ssq > 0.0) {
-        ssq = sqrt(ssq);
+        ssq = MICROPY_FLOAT_C_FUN(sqrt)(ssq);
         R_data[idxAjj] = ssq;
         if (j + 1 < n) {
           jmax = (n - j) - 1;
