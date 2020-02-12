@@ -33,29 +33,29 @@ void bdot_law(mp_float_t *c, size_t length) {
 
 }
 
-void cholesky(const double A_data[], const int A_size[2], double R_data[], int R_size[2])
+void cholesky(const mp_float_t A_data[], const size_t A_size[2], mp_float_t R_data[], size_t R_size[2])
 {
   int jmax;
   int n;
   int info;
   int j;
-  boolean_T exitg1;
+  bool exitg1;
   int idxAjj;
-  double ssq;
+  mp_float_t ssq;
   int ix;
   int iy;
   int i;
   int idxAjp1j;
   int b_i;
   int iac;
-  double c;
+  mp_float_t c;
   int i1;
   int ia;
   R_size[0] = A_size[0];
   R_size[1] = A_size[1];
   jmax = A_size[0] * A_size[1];
   if (0 <= jmax - 1) {
-    memcpy(&R_data[0], &A_data[0], jmax * sizeof(double));
+    memcpy(&R_data[0], &A_data[0], jmax * sizeof(mp_float_t));
   }
 
   n = A_size[1];
@@ -147,24 +147,25 @@ mp_obj_t ulab_controller_bdot(mp_obj_t self_in) {
 }
 
 mp_obj_t ulab_controller_cholesky(mp_obj_t A_input, mp_obj_t R_input) {
+
+    // get pointers to input arrays
     ulab_ndarray_obj_t *A_obj = MP_OBJ_TO_PTR(A_input);
     ulab_ndarray_obj_t *R_obj = MP_OBJ_TO_PTR(R_input);
 
-    // this passes in the array
-    // the size of a single item in the array
-    //uint8_t _sizeof = mp_binary_get_size('@', self->array->typecode, NULL);
-    
-    // NOTE: 
-    // we assume that the array passed in is of the form [u[1:3],Bdot[1:3]]
-    mp_float_t *A = (mp_float_t *)A_obj->array->items;
-    mp_float_t *R = (mp_float_t *)R_obj->array->items;
+    // extract pointers to underlying C data arrays for input ulab arrays
+    mp_float_t *A_data = (mp_float_t *)A_obj->array->items;
+    mp_float_t *R_data = (mp_float_t *)R_obj->array->items;
 
 
-    size_t a = 2;
+    // Is it bad to create these local size_t arrays?
+    size_t A_size[2] = {A_obj->m, A_obj->n};
+    size_t R_size[2] = {R_obj->m, R_obj->n};
 
-    // TODO: convert to mp_obj types
-    cholesky(const double A_data[], const int A_size[2], double R_data[], int R_size[2])
+    // Call Cholesky
+    cholesky(A_data, A_size, R_data, R_size);
 
+
+    // Do I return R????
     return MP_OBJ_FROM_PTR(R_obj);
 
 }
