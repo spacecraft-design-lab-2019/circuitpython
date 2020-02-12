@@ -12,6 +12,6 @@
 #define JACOBI_MAX     20
 
 mp_obj_t ulab_controller_bdot(mp_obj_t );
-
+mp_obj_t ulab_controller_cholesky(mp_obj_t A_input, mp_obj_t R_input);
 
 #endif // MICROPY_INCLUDED_SHARED_BINDINGS_ULAB_CONTROLLER_H
