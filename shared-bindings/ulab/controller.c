@@ -24,6 +24,7 @@
 #include "predict.h"
 #include "MEKFstep_data.h"
 
+
 void bdot_law(mp_float_t *c, size_t length) {
 	// this function takes in an array of the bdot and magnetic moment
 	// and modifies the moment in place
@@ -492,9 +493,9 @@ void ulab_controller_MEKF_step(mp_obj_t x_k_input, mp_obj_t P_k_input, mp_obj_t 
   mp_float_t *R_data = (mp_float_t *)R_obj->array->items;
 
   // Call the actual autocoded function, pray
-  void MEKFstep(x_k_data, P_k_data, w_k_data,
+  MEKFstep(x_k_data, P_k_data, w_k_data,
   r_sun_body_data, r_B_body_data, r_sun_inert_data, r_B_inert_data, Q_data, R_data, dt,
-  x_k_data, P_k_data) // Write over data in state/covariance vector/array
+  x_k_data, P_k_data); // Write over data in state/covariance vector/array
 
     // Do I return R????
   // return MP_OBJ_FROM_PTR(R_obj); // Switched to a void function
