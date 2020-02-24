@@ -12,19 +12,22 @@
 #include <math.h>
 #include "MEKFstep.h"
 #include "norm.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 
 /* Function Definitions */
 
 /*
- * Arguments    : const double x[3]
- * Return Type  : double
+ * Arguments    : const mp_float_t x[3]
+ * Return Type  : mp_float_t
  */
-double b_norm(const double x[3])
+mp_float_t b_norm(const mp_float_t x[3])
 {
-  double y;
-  double scale;
-  double absxk;
-  double t;
+  mp_float_t y;
+  mp_float_t scale;
+  mp_float_t absxk;
+  mp_float_t t;
   scale = 3.3121686421112381E-170;
   absxk = fabs(x[0]);
   if (absxk > 3.3121686421112381E-170) {

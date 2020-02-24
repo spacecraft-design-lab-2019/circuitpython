@@ -14,11 +14,12 @@
 /* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
-#include "rtwtypes.h"
-#include "MEKFstep_types.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 
 /* Function Declarations */
-extern double b_norm(const double x[3]);
+extern mp_float_t b_norm(const mp_float_t x[3]);
 
 #endif
 

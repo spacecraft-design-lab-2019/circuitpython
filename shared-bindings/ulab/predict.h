@@ -14,13 +14,13 @@
 /* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
-#include "rtwtypes.h"
-#include "MEKFstep_types.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 
 /* Function Declarations */
-extern void predict(const double x_k[7], const double P_k[36], const double w_k
-                    [3], double dt, const double Q[36], double x_pred[7], double
-                    P_pred[36]);
+extern void predict(const mp_float_t x_k[7], const mp_float_t P_k[36], const mp_float_t w_k[3],
+             mp_float_t dt, const mp_float_t Q[36], mp_float_t x_pred[7], mp_float_t P_pred[36]);
 
 #endif
 

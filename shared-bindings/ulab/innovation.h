@@ -14,13 +14,14 @@
 /* Include Files */
 #include <stddef.h>
 #include <stdlib.h>
-#include "rtwtypes.h"
-#include "MEKFstep_types.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 
 /* Function Declarations */
-extern void innovation(const double x_k[7], const double P_k[36], const double
-  r_sun_body[3], const double r_B_body[3], const double r_sun_inert[3], const
-  double r_B_inert[3], const double R[36], double z[6], double S[36], double C
+extern void innovation(const mp_float_t x_k[7], const mp_float_t P_k[36], const mp_float_t
+  r_sun_body[3], const mp_float_t r_B_body[3], const mp_float_t r_sun_inert[3], const
+  mp_float_t r_B_inert[3], const mp_float_t R[36], mp_float_t z[6], mp_float_t S[36], mp_float_t C
   [36]);
 
 #endif

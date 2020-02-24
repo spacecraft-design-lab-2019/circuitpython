@@ -14,7 +14,9 @@
 #include "MEKFstep.h"
 #include "predict.h"
 #include "norm.h"
-#include "MEKFstep_data.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 
 /* Function Definitions */
 

@@ -10,9 +10,11 @@
 
 /* Include Files */
 #include <string.h>
-#include "MEKFstep.h"
 #include "innovation.h"
-#include "MEKFstep_data.h"
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
+
 
 /* Function Definitions */
 
@@ -20,43 +22,43 @@
  * ------------------- Innovation step for state -------------------
  *  Get rotation matrix based on quaternion giving rotation from body to
  *  inertial reference frame
- * Arguments    : const double x_k[7]
- *                const double P_k[36]
- *                const double r_sun_body[3]
- *                const double r_B_body[3]
- *                const double r_sun_inert[3]
- *                const double r_B_inert[3]
- *                const double R[36]
- *                double z[6]
- *                double S[36]
- *                double C[36]
+ * Arguments    : const mp_float_t x_k[7]
+ *                const mp_float_t P_k[36]
+ *                const mp_float_t r_sun_body[3]
+ *                const mp_float_t r_B_body[3]
+ *                const mp_float_t r_sun_inert[3]
+ *                const mp_float_t r_B_inert[3]
+ *                const mp_float_t R[36]
+ *                mp_float_t z[6]
+ *                mp_float_t S[36]
+ *                mp_float_t C[36]
  * Return Type  : void
  */
-void innovation(const double x_k[7], const double P_k[36], const double
-                r_sun_body[3], const double r_B_body[3], const double
-                r_sun_inert[3], const double r_B_inert[3], const double R[36],
-                double z[6], double S[36], double C[36])
+void innovation(const mp_float_t x_k[7], const mp_float_t P_k[36], const mp_float_t
+                r_sun_body[3], const mp_float_t r_B_body[3], const mp_float_t
+                r_sun_inert[3], const mp_float_t r_B_inert[3], const mp_float_t R[36],
+                mp_float_t z[6], mp_float_t S[36], mp_float_t C[36])
 {
-  double L[16];
-  double R_N2B[9];
+  mp_float_t L[16];
+  mp_float_t R_N2B[9];
   int i3;
   int L_tmp;
-  double b_R[16];
+  mp_float_t b_R[16];
   int b_L_tmp;
   int i4;
-  double b_L[16];
-  double d1;
-  double b_R_N2B[36];
-  double b_r_sun_inert[6];
-  double y[3];
-  double b_y[3];
-  double d2;
-  double d3;
+  mp_float_t b_L[16];
+  mp_float_t d1;
+  mp_float_t b_R_N2B[36];
+  mp_float_t b_r_sun_inert[6];
+  mp_float_t y[3];
+  mp_float_t b_y[3];
+  mp_float_t d2;
+  mp_float_t d3;
 
   /*  returns the rotation matrix from body to inertial frame if a body to */
   /*  inertial quaternion is given */
   /*  for left quaternion multiplication q1*q2 = L(q1)q2 */
-  memset(&L[0], 0, sizeof(double) << 4);
+  memset(&L[0], 0, sizeof(mp_float_t) << 4);
   L[4] = -x_k[1];
   L[8] = -x_k[2];
   L[12] = -x_k[3];
@@ -77,15 +79,15 @@ void innovation(const double x_k[7], const double P_k[36], const double
   R_N2B[8] = 0.0;
   for (i3 = 0; i3 < 3; i3++) {
     L_tmp = (1 + i3) << 2;
-    L[L_tmp + 1] = x_k[0] * (double)iv0[3 * i3] + R_N2B[3 * i3];
+    L[L_tmp + 1] = x_k[0] * (mp_float_t)iv0[3 * i3] + R_N2B[3 * i3];
     b_L_tmp = 1 + 3 * i3;
-    L[L_tmp + 2] = x_k[0] * (double)iv0[b_L_tmp] + R_N2B[b_L_tmp];
+    L[L_tmp + 2] = x_k[0] * (mp_float_t)iv0[b_L_tmp] + R_N2B[b_L_tmp];
     b_L_tmp = 2 + 3 * i3;
-    L[L_tmp + 3] = x_k[0] * (double)iv0[b_L_tmp] + R_N2B[b_L_tmp];
+    L[L_tmp + 3] = x_k[0] * (mp_float_t)iv0[b_L_tmp] + R_N2B[b_L_tmp];
   }
 
   /*  for right quaternion multiplication q1*q2 = R(q2)*q1 */
-  memset(&b_R[0], 0, sizeof(double) << 4);
+  memset(&b_R[0], 0, sizeof(mp_float_t) << 4);
   b_R[4] = -x_k[1];
   b_R[8] = -x_k[2];
   b_R[12] = -x_k[3];
@@ -106,11 +108,11 @@ void innovation(const double x_k[7], const double P_k[36], const double
   R_N2B[8] = 0.0;
   for (i3 = 0; i3 < 3; i3++) {
     b_L_tmp = (1 + i3) << 2;
-    b_R[b_L_tmp + 1] = x_k[0] * (double)iv0[3 * i3] - R_N2B[3 * i3];
+    b_R[b_L_tmp + 1] = x_k[0] * (mp_float_t)iv0[3 * i3] - R_N2B[3 * i3];
     L_tmp = 1 + 3 * i3;
-    b_R[b_L_tmp + 2] = x_k[0] * (double)iv0[L_tmp] - R_N2B[L_tmp];
+    b_R[b_L_tmp + 2] = x_k[0] * (mp_float_t)iv0[L_tmp] - R_N2B[L_tmp];
     L_tmp = 2 + 3 * i3;
-    b_R[b_L_tmp + 3] = x_k[0] * (double)iv0[L_tmp] - R_N2B[L_tmp];
+    b_R[b_L_tmp + 3] = x_k[0] * (mp_float_t)iv0[L_tmp] - R_N2B[L_tmp];
   }
 
   /*  Transpose that to get the matrix we actually need for our prefit */
