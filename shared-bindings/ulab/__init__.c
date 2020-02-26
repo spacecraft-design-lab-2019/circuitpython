@@ -25,6 +25,9 @@
 #include "shared-bindings/ulab/ndarray.h"
 #include "shared-bindings/ulab/linalg.h"
 #include "shared-bindings/ulab/controller.h"
+#include "shared-bindings/ulab/innovation.h"
+#include "shared-bindings/ulab/predict.h"
+#include "shared-bindings/ulab/MEKFstep_data.h"
 
 const char *ulab_version = "0.262";
 
@@ -50,6 +53,8 @@ MP_DEFINE_CONST_FUN_OBJ_1(ulab_linalg_eig_obj, ulab_linalg_eig);
 // Stanford student stuff
 MP_DEFINE_CONST_FUN_OBJ_1(ulab_controller_bdot_obj, ulab_controller_bdot);
 MP_DEFINE_CONST_FUN_OBJ_2(ulab_controller_cholesky_obj, ulab_controller_cholesky);
+// MP_DEFINE_CONST_FUN_OBJ_KW(ulab_controller_MEKFstep_obj, 10, ulab_controller_MEKFstep);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(ulab_controller_MEKFstep_obj, 10, 10, ulab_controller_MEKFstep);
 
 //this is if you want to modify an array in place
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
@@ -93,7 +98,10 @@ STATIC const mp_rom_map_elem_t ulab_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_ones), (mp_obj_t)&ulab_linalg_ones_obj },
     { MP_ROM_QSTR(MP_QSTR_eye), (mp_obj_t)&ulab_linalg_eye_obj },
     { MP_ROM_QSTR(MP_QSTR_det), (mp_obj_t)&ulab_linalg_det_obj },
-    { MP_ROM_QSTR(MP_QSTR_eig), (mp_obj_t)&ulab_linalg_eig_obj },   
+    { MP_ROM_QSTR(MP_QSTR_eig), (mp_obj_t)&ulab_linalg_eig_obj },
+
+    // Stanford PyCubed stuff
+    { MP_ROM_QSTR(MP_QSTR_MEKFstep), MP_ROM_PTR(&ulab_controller_MEKFstep_obj) },  
 
     //class constants
     { MP_ROM_QSTR(MP_QSTR_uint8), MP_ROM_INT(NDARRAY_UINT8) },
