@@ -601,12 +601,11 @@ void predict(const mp_float_t x_k[7], const mp_float_t P_k[36], const mp_float_t
 void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   const mp_float_t r_sun_body[3], const mp_float_t r_B_body[3], const mp_float_t
   r_sun_inert[3], const mp_float_t r_B_inert[3], const mp_float_t Q[36],
-  const mp_float_t R[36], const mp_float_t* dt_ptr, mp_float_t x_k1[7], mp_float_t P_k1[36])
+  const mp_float_t R[36], const mp_float_t* dt_ptr)//, mp_float_t x_k1[7], mp_float_t P_k1[36])
 { 
-  x_k1[0] = 0.0;
-  // // Pre allocate stuff    
-  // mp_float_t x_pred[7];
-  // mp_float_t P_pred[36];
+  // Pre allocate stuff    
+  mp_float_t x_pred[7];
+  mp_float_t P_pred[36];
   // mp_float_t z[6];
   // mp_float_t S[36];
   // mp_float_t C[36];
@@ -630,13 +629,13 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   // mp_float_t dv1[4];
   // mp_float_t P_k1_tmp[36];
 
-  // // dereference dt ptr
-  // mp_float_t dt;
-  // dt = *dt_ptr;
+  // dereference dt ptr
+  mp_float_t dt;
+  dt = *dt_ptr;
 
 
-  // // Predict, measure, and innovate
-  // predict(x_k, P_k, w_k, dt, Q, x_pred, P_pred);
+  // Predict, measure, and innovate
+  predict(x_k, P_k, w_k, dt, Q, x_pred, P_pred);
   // innovation(x_pred, P_pred, r_sun_body, r_B_body, r_sun_inert, r_B_inert, R, z,
   //  S, C);
 
@@ -813,13 +812,13 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   // dv1[2] = dx[1] / 2.0;
   // dv1[3] = dx[2] / 2.0;
   // for (i0 = 0; i0 < 4; i0++) {
-  //   x_k1[i0] = ((b_L[i0] * dv1[0] + b_L[i0 + 4] * dv1[1]) + b_L[i0 + 8] * dv1[2])
+  //   x_k[i0] = ((b_L[i0] * dv1[0] + b_L[i0 + 4] * dv1[1]) + b_L[i0 + 8] * dv1[2])
   //   + b_L[i0 + 12] * dv1[3];
   // }
 
-  // x_k1[4] = x_pred[4] + dx[3];
-  // x_k1[5] = x_pred[5] + dx[4];
-  // x_k1[6] = x_pred[6] + dx[5];
+  // x_k[4] = x_pred[4] + dx[3];
+  // x_k[5] = x_pred[5] + dx[4];
+  // x_k[6] = x_pred[6] + dx[5];
 
   // /*  -------------------- Covariance Update ------------------ */
   // memset(&S[0], 0, 36U * sizeof(mp_float_t));
@@ -859,13 +858,13 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
 
   //   for (k = 0; k < 6; k++) {
   //     iy = i0 + 6 * k;
-  //     P_k1[iy] = 0.0;
+  //     P_k[iy] = 0.0;
   //     smax = 0.0;
   //     for (jp1j = 0; jp1j < 6; jp1j++) {
   //       smax += S[i0 + 6 * jp1j] * P_k1_tmp[k + 6 * jp1j];
   //     }
 
-  //     P_k1[iy] = smax;
+  //     P_k[iy] = smax;
   //   }
   // }
 
@@ -883,7 +882,7 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   // }
 
   // for (i0 = 0; i0 < 36; i0++) {
-  //   P_k1[i0] += S[i0];
+  //   P_k[i0] += S[i0];
   // }
 }
 
@@ -965,8 +964,8 @@ void ulab_controller_MEKFstepC(mp_obj_t x_k_input, mp_obj_t P_k_input, const mp_
 
   // Call the actual autocoded function, pray
   MEKFstep(x_k_data, P_k_data, w_k_data,
-  r_sun_body_data, r_B_body_data, r_sun_inert_data, r_B_inert_data, Q_data, R_data, dt_data,
-  x_k_data, P_k_data); // Write over data in state/covariance vector/array
+  r_sun_body_data, r_B_body_data, r_sun_inert_data, r_B_inert_data, Q_data, R_data, dt_data);
+   // Write over data in state/covariance vector/array
 
     // Do I return R????
   // return MP_OBJ_FROM_PTR(x_k_obj); // Switched to a void function
