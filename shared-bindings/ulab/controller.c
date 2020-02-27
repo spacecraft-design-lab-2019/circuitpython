@@ -606,284 +606,292 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   // Pre allocate stuff    
   mp_float_t x_pred[7];
   mp_float_t P_pred[36];
-  // mp_float_t z[6];
-  // mp_float_t S[36];
-  // mp_float_t C[36];
-  // int i0;
-  // int j;
-  // int k;
-  // int jAcol;
-  // signed char ipiv[6];
-  // int ix;
-  // int jj;
-  // mp_float_t L[36];
-  // int jA;
-  // int jp1j;
-  // mp_float_t smax;
-  // int n;
-  // int iy;
-  // mp_float_t dx[6];
-  // mp_float_t s;
-  // mp_float_t b_L[16];
-  // mp_float_t dv0[9];
-  // mp_float_t dv1[4];
-  // mp_float_t P_k1_tmp[36];
+  mp_float_t z[6];
+  mp_float_t S[36];
+  mp_float_t C[36];
+  int i0;
+  int j;
+  int k;
+  int jAcol;
+  signed char ipiv[6];
+  int ix;
+  int jj;
+  mp_float_t L[36];
+  int jA;
+  int jp1j;
+  mp_float_t smax;
+  int n;
+  int iy;
+  mp_float_t dx[6];
+  mp_float_t s;
+  mp_float_t b_L[16];
+  mp_float_t dv0[9];
+  mp_float_t dv1[4];
+  mp_float_t P_k1_tmp[36];
 
   // dereference dt ptr
-  mp_float_t dt;
-  dt = *dt_ptr;
+  // mp_float_t dt;
+  // dt = *dt_ptr;
+  mp_float_t dt = .1;
 
 
   // Predict, measure, and innovate
   predict(x_k, P_k, w_k, dt, Q, x_pred, P_pred);
-  // innovation(x_pred, P_pred, r_sun_body, r_B_body, r_sun_inert, r_B_inert, R, z,
-  //  S, C);
 
-  // // Get Kalman gain, this is with generic L = P*C'/S in MATLAB
-  // for (i0 = 0; i0 < 6; i0++) {
-  //   for (k = 0; k < 6; k++) {
-  //     ix = i0 + 6 * k;
-  //     L[ix] = 0.0;
-  //     smax = 0.0;
-  //     for (jp1j = 0; jp1j < 6; jp1j++) {
-  //       smax += P_pred[i0 + 6 * jp1j] * C[k + 6 * jp1j];
-  //     }
-
-  //     L[ix] = smax;
-  //   }
-
-  //   ipiv[i0] = (signed char)(1 + i0);
+  // Stupid sandbox function
+  // for (int i = 0; i < 6; ++i)
+  // {
+  //   x_k[i] = x_pred[i];
   // }
+  
+  innovation(x_pred, P_pred, r_sun_body, r_B_body, r_sun_inert, r_B_inert, R, z,
+   S, C);
 
-  // for (j = 0; j < 5; j++) {
-  //   jAcol = j * 7;
-  //   jj = j * 7;
-  //   jp1j = jAcol + 2;
-  //   n = 6 - j;
-  //   iy = 0;
-  //   ix = jAcol;
-  //   smax = abs(S[jAcol]);
-  //   for (k = 2; k <= n; k++) {
-  //     ix++;
-  //     s = abs(S[ix]);
-  //     if (s > smax) {
-  //       iy = k - 1;
-  //       smax = s;
-  //     }
-  //   }
+  // Get Kalman gain, this is with generic L = P*C'/S in MATLAB
+  for (i0 = 0; i0 < 6; i0++) {
+    for (k = 0; k < 6; k++) {
+      ix = i0 + 6 * k;
+      L[ix] = 0.0;
+      smax = 0.0;
+      for (jp1j = 0; jp1j < 6; jp1j++) {
+        smax += P_pred[i0 + 6 * jp1j] * C[k + 6 * jp1j];
+      }
 
-  //   if (abs(S[jj + iy]) > 0.0) {
-  //     if (iy != 0) {
-  //       iy += j;
-  //       ipiv[j] = (signed char)(iy + 1);
-  //       ix = j;
-  //       for (k = 0; k < 6; k++) {
-  //         smax = S[ix];
-  //         S[ix] = S[iy];
-  //         S[iy] = smax;
-  //         ix += 6;
-  //         iy += 6;
-  //       }
-  //     }
+      L[ix] = smax;
+    }
 
-  //     i0 = (jj - j) + 6;
-  //     for (n = jp1j; n <= i0; n++) {
-  //       S[n - 1] /= S[jj];
-  //     }
-  //   }
+    ipiv[i0] = (signed char)(1 + i0);
+  }
 
-  //   n = 4 - j;
-  //   iy = jAcol + 6;
-  //   jA = jj;
-  //   for (jAcol = 0; jAcol <= n; jAcol++) {
-  //     smax = S[iy];
-  //     if (abs(S[iy]) > 0.0) {
-  //       ix = jj + 1;
-  //       i0 = jA + 8;
-  //       k = (jA - j) + 12;
-  //       for (jp1j = i0; jp1j <= k; jp1j++) {
-  //         S[jp1j - 1] += S[ix] * -smax;
-  //         ix++;
-  //       }
-  //     }
+  for (j = 0; j < 5; j++) {
+    jAcol = j * 7;
+    jj = j * 7;
+    jp1j = jAcol + 2;
+    n = 6 - j;
+    iy = 0;
+    ix = jAcol;
+    smax = abs(S[jAcol]);
+    for (k = 2; k <= n; k++) {
+      ix++;
+      s = abs(S[ix]);
+      if (s > smax) {
+        iy = k - 1;
+        smax = s;
+      }
+    }
 
-  //     iy += 6;
-  //     jA += 6;
-  //   }
-  // }
+    if (abs(S[jj + iy]) > 0.0) {
+      if (iy != 0) {
+        iy += j;
+        ipiv[j] = (signed char)(iy + 1);
+        ix = j;
+        for (k = 0; k < 6; k++) {
+          smax = S[ix];
+          S[ix] = S[iy];
+          S[iy] = smax;
+          ix += 6;
+          iy += 6;
+        }
+      }
 
-  // for (j = 0; j < 6; j++) {
-  //   jA = 6 * j - 1;
-  //   jAcol = 6 * j;
-  //   for (k = 0; k < j; k++) {
-  //     jp1j = 6 * k;
-  //     smax = S[k + jAcol];
-  //     if (abs(smax) > 0.0) {
-  //       for (n = 0; n < 6; n++) {
-  //         ix = (n + jA) + 1;
-  //         L[ix] -= smax * L[n + jp1j];
-  //       }
-  //     }
-  //   }
+      i0 = (jj - j) + 6;
+      for (n = jp1j; n <= i0; n++) {
+        S[n - 1] /= S[jj];
+      }
+    }
 
-  //   smax = 1.0 / S[j + jAcol];
-  //   for (n = 0; n < 6; n++) {
-  //     ix = (n + jA) + 1;
-  //     L[ix] *= smax;
-  //   }
-  // }
+    n = 4 - j;
+    iy = jAcol + 6;
+    jA = jj;
+    for (jAcol = 0; jAcol <= n; jAcol++) {
+      smax = S[iy];
+      if (abs(S[iy]) > 0.0) {
+        ix = jj + 1;
+        i0 = jA + 8;
+        k = (jA - j) + 12;
+        for (jp1j = i0; jp1j <= k; jp1j++) {
+          S[jp1j - 1] += S[ix] * -smax;
+          ix++;
+        }
+      }
 
-  // for (j = 5; j >= 0; j--) {
-  //   iy = 6 * j - 1;
-  //   i0 = j + 2;
-  //   for (k = i0; k < 7; k++) {
-  //     jp1j = 6 * (k - 1);
-  //     smax = S[k + iy];
-  //     if (abs(smax) > 0.0) {
-  //       for (n = 0; n < 6; n++) {
-  //         ix = (n + iy) + 1;
-  //         L[ix] -= smax * L[n + jp1j];
-  //       }
-  //     }
-  //   }
-  // }
+      iy += 6;
+      jA += 6;
+    }
+  }
 
-  // for (iy = 4; iy >= 0; iy--) {
-  //   if (ipiv[iy] != iy + 1) {
-  //     for (jA = 0; jA < 6; jA++) {
-  //       jAcol = jA + 6 * iy;
-  //       smax = L[jAcol];
-  //       ix = jA + 6 * (ipiv[iy] - 1);
-  //       L[jAcol] = L[ix];
-  //       L[ix] = smax;
-  //     }
-  //   }
-  // }
+  for (j = 0; j < 6; j++) {
+    jA = 6 * j - 1;
+    jAcol = 6 * j;
+    for (k = 0; k < j; k++) {
+      jp1j = 6 * k;
+      smax = S[k + jAcol];
+      if (abs(smax) > 0.0) {
+        for (n = 0; n < 6; n++) {
+          ix = (n + jA) + 1;
+          L[ix] -= smax * L[n + jp1j];
+        }
+      }
+    }
 
-  // // Update
-  // /*  unpack state */
-  // /*  post-fit residuals */
-  // for (i0 = 0; i0 < 6; i0++) {
-  //   dx[i0] = 0.0;
-  //   smax = 0.0;
-  //   for (k = 0; k < 6; k++) {
-  //     smax += L[i0 + 6 * k] * z[k];
-  //   }
+    smax = 1.0 / S[j + jAcol];
+    for (n = 0; n < 6; n++) {
+      ix = (n + jA) + 1;
+      L[ix] *= smax;
+    }
+  }
 
-  //   dx[i0] = smax;
-  // }
+  for (j = 5; j >= 0; j--) {
+    iy = 6 * j - 1;
+    i0 = j + 2;
+    for (k = i0; k < 7; k++) {
+      jp1j = 6 * (k - 1);
+      smax = S[k + iy];
+      if (abs(smax) > 0.0) {
+        for (n = 0; n < 6; n++) {
+          ix = (n + iy) + 1;
+          L[ix] -= smax * L[n + jp1j];
+        }
+      }
+    }
+  }
 
-  // /*  -------------------- State Update ----------------------- */
-  // /*  equivalent to quaternion multiplication q1*q2 for scalar first */
-  // /*  quaternions */
-  // /*  for left quaternion multiplication q1*q2 = L(q1)q2 */
-  // memset(&b_L[0], 0, sizeof(mp_float_t) << 4);
-  // b_L[4] = -x_pred[1];
-  // b_L[8] = -x_pred[2];
-  // b_L[12] = -x_pred[3];
-  // b_L[0] = x_pred[0];
-  // b_L[1] = x_pred[1];
-  // b_L[2] = x_pred[2];
-  // b_L[3] = x_pred[3];
+  for (iy = 4; iy >= 0; iy--) {
+    if (ipiv[iy] != iy + 1) {
+      for (jA = 0; jA < 6; jA++) {
+        jAcol = jA + 6 * iy;
+        smax = L[jAcol];
+        ix = jA + 6 * (ipiv[iy] - 1);
+        L[jAcol] = L[ix];
+        L[ix] = smax;
+      }
+    }
+  }
 
-  // /*  Returns skew symmetric - cross product matrix of a vector */
-  // dv0[0] = 0.0;
-  // dv0[3] = -x_pred[3];
-  // dv0[6] = x_pred[2];
-  // dv0[1] = x_pred[3];
-  // dv0[4] = 0.0;
-  // dv0[7] = -x_pred[1];
-  // dv0[2] = -x_pred[2];
-  // dv0[5] = x_pred[1];
-  // dv0[8] = 0.0;
-  // smax = 0.0;
-  // for (i0 = 0; i0 < 3; i0++) {
-  //   ix = (1 + i0) << 2;
-  //   b_L[ix + 1] = x_pred[0] * (mp_float_t)iv0[3 * i0] + dv0[3 * i0];
-  //   iy = 1 + 3 * i0;
-  //   b_L[ix + 2] = x_pred[0] * (mp_float_t)iv0[iy] + dv0[iy];
-  //   iy = 2 + 3 * i0;
-  //   b_L[ix + 3] = x_pred[0] * (mp_float_t)iv0[iy] + dv0[iy];
-  //   smax += dx[i0] * dx[i0];
-  // }
+  // Update
+  /*  unpack state */
+  /*  post-fit residuals */
+  for (i0 = 0; i0 < 6; i0++) {
+    dx[i0] = 0.0;
+    smax = 0.0;
+    for (k = 0; k < 6; k++) {
+      smax += L[i0 + 6 * k] * z[k];
+    }
 
-  // dv1[0] = MICROPY_FLOAT_C_FUN(sqrt)(1.0 - smax);
-  // dv1[1] = dx[0] / 2.0;
-  // dv1[2] = dx[1] / 2.0;
-  // dv1[3] = dx[2] / 2.0;
-  // for (i0 = 0; i0 < 4; i0++) {
-  //   x_k[i0] = ((b_L[i0] * dv1[0] + b_L[i0 + 4] * dv1[1]) + b_L[i0 + 8] * dv1[2])
-  //   + b_L[i0 + 12] * dv1[3];
-  // }
+    dx[i0] = smax;
+  }
 
-  // x_k[4] = x_pred[4] + dx[3];
-  // x_k[5] = x_pred[5] + dx[4];
-  // x_k[6] = x_pred[6] + dx[5];
+  /*  -------------------- State Update ----------------------- */
+  /*  equivalent to quaternion multiplication q1*q2 for scalar first */
+  /*  quaternions */
+  /*  for left quaternion multiplication q1*q2 = L(q1)q2 */
+  memset(&b_L[0], 0, sizeof(mp_float_t) << 4);
+  b_L[4] = -x_pred[1];
+  b_L[8] = -x_pred[2];
+  b_L[12] = -x_pred[3];
+  b_L[0] = x_pred[0];
+  b_L[1] = x_pred[1];
+  b_L[2] = x_pred[2];
+  b_L[3] = x_pred[3];
 
-  // /*  -------------------- Covariance Update ------------------ */
-  // memset(&S[0], 0, 36U * sizeof(mp_float_t));
-  // for (k = 0; k < 6; k++) {
-  //   S[k + 6 * k] = 1.0;
-  // }
+  /*  Returns skew symmetric - cross product matrix of a vector */
+  dv0[0] = 0.0;
+  dv0[3] = -x_pred[3];
+  dv0[6] = x_pred[2];
+  dv0[1] = x_pred[3];
+  dv0[4] = 0.0;
+  dv0[7] = -x_pred[1];
+  dv0[2] = -x_pred[2];
+  dv0[5] = x_pred[1];
+  dv0[8] = 0.0;
+  smax = 0.0;
+  for (i0 = 0; i0 < 3; i0++) {
+    ix = (1 + i0) << 2;
+    b_L[ix + 1] = x_pred[0] * (mp_float_t)iv0[3 * i0] + dv0[3 * i0];
+    iy = 1 + 3 * i0;
+    b_L[ix + 2] = x_pred[0] * (mp_float_t)iv0[iy] + dv0[iy];
+    iy = 2 + 3 * i0;
+    b_L[ix + 3] = x_pred[0] * (mp_float_t)iv0[iy] + dv0[iy];
+    smax += dx[i0] * dx[i0];
+  }
 
-  // for (i0 = 0; i0 < 6; i0++) {
-  //   for (k = 0; k < 6; k++) {
-  //     smax = 0.0;
-  //     for (jp1j = 0; jp1j < 6; jp1j++) {
-  //       smax += L[i0 + 6 * jp1j] * C[jp1j + 6 * k];
-  //     }
+  dv1[0] = MICROPY_FLOAT_C_FUN(sqrt)(1.0 - smax);
+  dv1[1] = dx[0] / 2.0;
+  dv1[2] = dx[1] / 2.0;
+  dv1[3] = dx[2] / 2.0;
+  for (i0 = 0; i0 < 4; i0++) {
+    x_k[i0] = ((b_L[i0] * dv1[0] + b_L[i0 + 4] * dv1[1]) + b_L[i0 + 8] * dv1[2])
+    + b_L[i0 + 12] * dv1[3];
+  }
 
-  //     iy = i0 + 6 * k;
-  //     P_k1_tmp[iy] = S[iy] - smax;
-  //   }
-  // }
+  x_k[4] = x_pred[4] + dx[3];
+  x_k[5] = x_pred[5] + dx[4];
+  x_k[6] = x_pred[6] + dx[5];
 
-  // for (i0 = 0; i0 < 6; i0++) {
-  //   for (k = 0; k < 6; k++) {
-  //     iy = i0 + 6 * k;
-  //     S[iy] = 0.0;
-  //     C[iy] = 0.0;
-  //     smax = 0.0;
-  //     s = 0.0;
-  //     for (jp1j = 0; jp1j < 6; jp1j++) {
-  //       jA = i0 + 6 * jp1j;
-  //       jAcol = jp1j + 6 * k;
-  //       smax += P_k1_tmp[jA] * P_pred[jAcol];
-  //       s += L[jA] * R[jAcol];
-  //     }
+  /*  -------------------- Covariance Update ------------------ */
+  memset(&S[0], 0, 36U * sizeof(mp_float_t));
+  for (k = 0; k < 6; k++) {
+    S[k + 6 * k] = 1.0;
+  }
 
-  //     C[iy] = s;
-  //     S[iy] = smax;
-  //   }
+  for (i0 = 0; i0 < 6; i0++) {
+    for (k = 0; k < 6; k++) {
+      smax = 0.0;
+      for (jp1j = 0; jp1j < 6; jp1j++) {
+        smax += L[i0 + 6 * jp1j] * C[jp1j + 6 * k];
+      }
 
-  //   for (k = 0; k < 6; k++) {
-  //     iy = i0 + 6 * k;
-  //     P_k[iy] = 0.0;
-  //     smax = 0.0;
-  //     for (jp1j = 0; jp1j < 6; jp1j++) {
-  //       smax += S[i0 + 6 * jp1j] * P_k1_tmp[k + 6 * jp1j];
-  //     }
+      iy = i0 + 6 * k;
+      P_k1_tmp[iy] = S[iy] - smax;
+    }
+  }
 
-  //     P_k[iy] = smax;
-  //   }
-  // }
+  for (i0 = 0; i0 < 6; i0++) {
+    for (k = 0; k < 6; k++) {
+      iy = i0 + 6 * k;
+      S[iy] = 0.0;
+      C[iy] = 0.0;
+      smax = 0.0;
+      s = 0.0;
+      for (jp1j = 0; jp1j < 6; jp1j++) {
+        jA = i0 + 6 * jp1j;
+        jAcol = jp1j + 6 * k;
+        smax += P_k1_tmp[jA] * P_pred[jAcol];
+        s += L[jA] * R[jAcol];
+      }
 
-  // for (i0 = 0; i0 < 6; i0++) {
-  //   for (k = 0; k < 6; k++) {
-  //     iy = i0 + 6 * k;
-  //     S[iy] = 0.0;
-  //     smax = 0.0;
-  //     for (jp1j = 0; jp1j < 6; jp1j++) {
-  //       smax += C[i0 + 6 * jp1j] * L[k + 6 * jp1j];
-  //     }
+      C[iy] = s;
+      S[iy] = smax;
+    }
 
-  //     S[iy] = smax;
-  //   }
-  // }
+    for (k = 0; k < 6; k++) {
+      iy = i0 + 6 * k;
+      P_k[iy] = 0.0;
+      smax = 0.0;
+      for (jp1j = 0; jp1j < 6; jp1j++) {
+        smax += S[i0 + 6 * jp1j] * P_k1_tmp[k + 6 * jp1j];
+      }
 
-  // for (i0 = 0; i0 < 36; i0++) {
-  //   P_k[i0] += S[i0];
-  // }
+      P_k[iy] = smax;
+    }
+  }
+
+  for (i0 = 0; i0 < 6; i0++) {
+    for (k = 0; k < 6; k++) {
+      iy = i0 + 6 * k;
+      S[iy] = 0.0;
+      smax = 0.0;
+      for (jp1j = 0; jp1j < 6; jp1j++) {
+        smax += C[i0 + 6 * jp1j] * L[k + 6 * jp1j];
+      }
+
+      S[iy] = smax;
+    }
+  }
+
+  for (i0 = 0; i0 < 36; i0++) {
+    P_k[i0] += S[i0];
+  }
 }
 
 // Make alternate MEKF step that does nothing
