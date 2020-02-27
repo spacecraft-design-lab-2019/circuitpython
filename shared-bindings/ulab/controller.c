@@ -601,8 +601,7 @@ void predict(const mp_float_t x_k[7], const mp_float_t P_k[36], const mp_float_t
 void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   const mp_float_t r_sun_body[3], const mp_float_t r_B_body[3], const mp_float_t
   r_sun_inert[3], const mp_float_t r_B_inert[3], const mp_float_t Q[36],
-  const mp_float_t R[36], const mp_float_t* dt_ptr)//, mp_float_t x_k1[7], mp_float_t P_k1[36])
-{ 
+  const mp_float_t R[36], const mp_float_t* dt_ptr){ 
   // Pre allocate stuff    
   mp_float_t x_pred[7];
   mp_float_t P_pred[36];
@@ -628,22 +627,10 @@ void MEKFstep(mp_float_t x_k[7], mp_float_t P_k[36], const mp_float_t w_k[3],
   mp_float_t dv0[9];
   mp_float_t dv1[4];
   mp_float_t P_k1_tmp[36];
-
-  // dereference dt ptr
-  // mp_float_t dt;
-  // dt = *dt_ptr;
-  mp_float_t dt = .1;
-
+  mp_float_t dt = dt_ptr[0];
 
   // Predict, measure, and innovate
   predict(x_k, P_k, w_k, dt, Q, x_pred, P_pred);
-
-  // Stupid sandbox function
-  // for (int i = 0; i < 6; ++i)
-  // {
-  //   x_k[i] = x_pred[i];
-  // }
-  
   innovation(x_pred, P_pred, r_sun_body, r_B_body, r_sun_inert, r_B_inert, R, z,
    S, C);
 
@@ -940,7 +927,7 @@ mp_obj_t ulab_controller_cholesky(mp_obj_t A_input, mp_obj_t R_input) {
 
 
 void ulab_controller_MEKFstepC(mp_obj_t x_k_input, mp_obj_t P_k_input, const mp_obj_t w_k_input, const mp_obj_t r_sun_body_input, const mp_obj_t r_B_body_input,
-  const mp_obj_t r_sun_inert_input, const mp_obj_t r_B_inert_input, const mp_obj_t Q_input, const mp_obj_t R_input, const mp_obj_t dt) {
+  const mp_obj_t r_sun_inert_input, const mp_obj_t r_B_inert_input, const mp_obj_t Q_input, const mp_obj_t R_input, const mp_obj_t dt_input) {
 
     // Do I take in an x_k+1 and P_k+1? (I think I should just update them in place, unless we want to keep a history)
     // How to handle when we're in eclipse? Multiple MEKFs? (one for dead reckoning, etc.) Take in an eclipse flag?
@@ -956,6 +943,7 @@ void ulab_controller_MEKFstepC(mp_obj_t x_k_input, mp_obj_t P_k_input, const mp_
   ulab_ndarray_obj_t *r_B_inert_obj = MP_OBJ_TO_PTR(r_B_inert_input);
   ulab_ndarray_obj_t *Q_obj = MP_OBJ_TO_PTR(Q_input);
   ulab_ndarray_obj_t *R_obj = MP_OBJ_TO_PTR(R_input);
+  ulab_ndarray_obj_t *dt_obj = MP_OBJ_TO_PTR(dt_input);
 
 
     // extract pointers to underlying C data arrays for input ulab arrays
@@ -968,7 +956,7 @@ void ulab_controller_MEKFstepC(mp_obj_t x_k_input, mp_obj_t P_k_input, const mp_
   mp_float_t *r_B_inert_data = (mp_float_t *)r_B_inert_obj->array->items;
   mp_float_t *Q_data = (mp_float_t *)Q_obj->array->items;
   mp_float_t *R_data = (mp_float_t *)R_obj->array->items;
-  mp_float_t *dt_data = (mp_float_t *) dt;
+  mp_float_t *dt_data = (mp_float_t *)dt_obj->array->items;
 
   // Call the actual autocoded function, pray
   MEKFstep(x_k_data, P_k_data, w_k_data,
