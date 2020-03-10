@@ -56,7 +56,8 @@ MP_DEFINE_CONST_FUN_OBJ_2(ulab_controller_cholesky_obj, ulab_controller_cholesky
 // MP_DEFINE_CONST_FUN_OBJ_KW(ulab_controller_MEKFstep_obj, 10, ulab_controller_MEKFstep);
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(ulab_controller_MEKFstep_obj, 10, 10, ulab_controller_MEKFstep);
 
-//this is if you want to modify an array in place
+// This is for functions of the form Array.function(other Array)
+// ( matrix.do() )
 STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_shape), MP_ROM_PTR(&ulab_ndarray_shape_obj) },
     { MP_ROM_QSTR(MP_QSTR_copy), MP_ROM_PTR(&ulab_ndarray_copy_obj) },
@@ -85,7 +86,8 @@ const mp_obj_type_t ulab_ndarray_type = {
     .locals_dict = (mp_obj_dict_t*)&ulab_ndarray_locals_dict,
 };
 
-// this is if you want to create a new array with these functions or output some other value (like size)
+// This is for functions of the form np.function(Array, other Array,...)
+// ( np.do(), Not matrix.do() )
 STATIC const mp_rom_map_elem_t ulab_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_OBJ_NEW_QSTR(MP_QSTR_ulab) },
     { MP_ROM_QSTR(MP_QSTR___version__), MP_ROM_PTR(&ulab_version) },
