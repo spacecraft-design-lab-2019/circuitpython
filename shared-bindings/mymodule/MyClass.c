@@ -9,6 +9,7 @@
 #include "shared-module/ulab/ndarray.h"
 #include "shared-bindings/ulab/ndarray.h"
 
+
 //| .. currentmodule:: mymodule
 //|
 //| :class:`MyClass` -- The great question (and answer to it) of life, the universe, and everything.
@@ -87,6 +88,19 @@ MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_author_obj, mymodule_myclass_obj_
 //|     The answer to the question of life, the universe and everything
 //|
 STATIC mp_obj_t mymodule_myclass_obj_get_answer(mp_obj_t self_in) {
+  int size;
+  size = 3;
+  double B_dot[size], max_dipoles[size], commanded_dipole[size];  
+
+
+
+  for (int i = 0; i < size; ++i)
+  {
+    B_dot[i] = -1.0;
+    max_dipoles[i] = 3.0;
+  }
+
+  detumble_B_dot_C(B_dot, max_dipoles, commanded_dipole);
   return mp_obj_new_int(shared_module_mymodule_myclass_get_answer(self_in));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_answer_obj, mymodule_myclass_obj_get_answer);
@@ -111,6 +125,7 @@ STATIC mp_obj_t mymodule_myclass_obj_get_square(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_square_obj, mymodule_myclass_obj_get_square);
 
+
 //|   .. attribute:: return length
 //|
 //|
@@ -121,17 +136,6 @@ STATIC mp_obj_t mymodule_myclass_obj_get_length(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_length_obj, mymodule_myclass_obj_get_length);
 
-//|   .. attribute:: return C (array)
-//|
-//|
-//|     returns an array
-//|
-STATIC mp_obj_t mymodule_myclass_obj_get_C(mp_obj_t self_in) {
-  size_t l = 10;
-  mp_obj_t data = shared_module_mymodule_myclass_get_C;
-  return mp_obj_new_list(l, data);
-}
-MP_DEFINE_CONST_FUN_OBJ_1(mymodule_myclass_get_C_obj, mymodule_myclass_obj_get_C);
 
 const mp_obj_property_t mymodule_myclass_question_obj = {
     .base.type = &mp_type_property,

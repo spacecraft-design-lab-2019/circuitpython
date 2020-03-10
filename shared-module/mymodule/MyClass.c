@@ -27,6 +27,7 @@ const char * shared_module_mymodule_myclass_get_question(mymodule_myclass_obj_t*
 }
  
 mp_int_t shared_module_mymodule_myclass_get_answer(mymodule_myclass_obj_t* self) {
+	
   return 42;
 }
 
@@ -36,24 +37,5 @@ const char * shared_module_mymodule_myclass_get_author(mymodule_myclass_obj_t* s
 
 mp_int_t shared_module_mymodule_myclass_get_square(mymodule_myclass_obj_t* self) {
 	return self->input*self->input;
-}
-
-mp_int_t shared_module_mymodule_myclass_get_input(mymodule_myclass_obj_t* self) {
-	return self->input;
-}
-
-mp_int_t shared_module_mymodule_myclass_get_length(mymodule_myclass_obj_t* self) {
-	return self->length;
-}
-
-mp_obj_t shared_module_mymodule_myclass_get_C(mymodule_myclass_obj_t* self) {
-	return self->C;
-} 
-
-void get_array(float *C) {
-	size_t n = 10;
-	for (size_t i = 0; i <= n-1; i++) {
-		C[i] = 0;
-	}
 }
 

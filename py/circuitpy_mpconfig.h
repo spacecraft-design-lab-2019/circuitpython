@@ -585,6 +585,14 @@ extern const struct _mp_obj_module_t mymodule_module;
 #define MYMODULE_MODULE
 #endif
 
+#if CIRCUITPY_CONTROLLER
+extern const struct _mp_obj_module_t controller_module;
+#define CONTROLLER_MODULE         { MP_OBJ_NEW_QSTR(MP_QSTR_controller), (mp_obj_t)&controller_module },
+#else
+#define CONTROLLER_MODULE
+#endif
+
+
 // Define certain native modules with weak links so they can be replaced with Python
 // implementations. This list may grow over time.
 #define MICROPY_PORT_BUILTIN_MODULE_WEAK_LINKS \
@@ -651,6 +659,7 @@ extern const struct _mp_obj_module_t mymodule_module;
     USTACK_MODULE \
     MYMODULE_MODULE \
     ULAB_MODULE \
+    CONTROLLER_MODULE \
 
 // If weak links are enabled, just include strong links in the main list of modules,
 // and also include the underscore alternate names.

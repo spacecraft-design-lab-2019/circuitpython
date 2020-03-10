@@ -232,6 +232,10 @@ endif
 ifeq ($(CIRCUITPY_ULAB),1)
 SRC_PATTERNS += ulab/%
 endif
+ifeq ($(CIRCUITPY_CONTROLLER),1)
+SRC_PATTERNS += controller/%
+endif
+
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS in SRC_COMMON_HAL
 SRC_COMMON_HAL_ALL = \
@@ -372,6 +376,7 @@ SRC_SHARED_MODULE_ALL = \
 	ulab/ndarray.c \
 	ulab/linalg.c \
 	ulab/controller.c \
+
 	network/__init__.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
