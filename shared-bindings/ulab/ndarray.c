@@ -787,6 +787,7 @@ mp_obj_t ulab_ndarray_flatten(size_t n_args, const mp_obj_t *pos_args, mp_map_t 
     return self_copy;
 }
 
+
 mp_obj_t ulab_ndarray_binary_op(mp_binary_op_t op, mp_obj_t lhs, mp_obj_t rhs) {
 //    if(op == MP_BINARY_OP_REVERSE_ADD) {
  //       return ndarray_binary_op(MP_BINARY_OP_ADD, rhs, lhs);
@@ -1016,3 +1017,6 @@ mp_obj_t ulab_ndarray_unary_op(mp_unary_op_t op, mp_obj_t self_in) {
         default: return MP_OBJ_NULL; // operator not supported
     }
 }
+
+// create a new array from C
+

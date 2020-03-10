@@ -22,6 +22,33 @@
 #include "shared-bindings/ulab/ndarray.h"
 
 
+mp_obj_t ulab_linalg_zeroed(mp_obj_t self_in) {
+    ulab_ndarray_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    // the size of a single item in the array
+    uint8_t _sizeof = mp_binary_get_size('@', self->array->typecode, NULL);
+    
+    // NOTE: 
+    // we are making all the items in the array 0 
+    
+    // NOTE: 
+    //  In the old matrix, the coordinate (m, n) is m*self->n + n
+    //  We have to assign this to the coordinate (n, m) in the new 
+    //  matrix, i.e., to n*self->m + m (since the new matrix has self->m columns)
+    
+    uint8_t *c = (uint8_t *)self->array->items;
+    // self->bytes is the size of the bytearray, irrespective of the typecode
+    //uint8_t *tmp = m_new(uint8_t, self->bytes);
+    for(size_t m=0; m < self->m; m++) {
+        for(size_t n=0; n < self->n; n++) {
+            uint8_t *temp = 0;
+            memcpy(c+_sizeof*(n*self->m + m), temp, _sizeof);
+        }
+    }
+    memcpy(self->array->items, c, self->bytes);
+    m_del(uint8_t, c, self->bytes);
+    return mp_const_none;
+}
+
 mp_obj_t ulab_linalg_transpose(mp_obj_t self_in) {
     ulab_ndarray_obj_t *self = MP_OBJ_TO_PTR(self_in);
     // the size of a single item in the array

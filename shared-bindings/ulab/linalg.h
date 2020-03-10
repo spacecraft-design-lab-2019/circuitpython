@@ -18,6 +18,7 @@
 #define JACOBI_MAX     20
 
 mp_obj_t ulab_linalg_transpose(mp_obj_t );
+mp_obj_t ulab_linalg_zeroed(mp_obj_t );
 mp_obj_t ulab_linalg_reshape(mp_obj_t , mp_obj_t );
 mp_obj_t ulab_linalg_size(size_t , const mp_obj_t *, mp_map_t *);
 
