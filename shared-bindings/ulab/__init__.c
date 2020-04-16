@@ -28,6 +28,8 @@
 #include "shared-bindings/ulab/innovation.h"
 #include "shared-bindings/ulab/predict.h"
 #include "shared-bindings/ulab/MEKFstep_data.h"
+#include "shared-bindings/ulab/get_magnetic_field.h"
+#include "shared-bindings/ulab/get_magnetic_field_series.h"
 
 const char *ulab_version = "0.262";
 
@@ -55,6 +57,8 @@ MP_DEFINE_CONST_FUN_OBJ_1(ulab_controller_bdot_obj, ulab_controller_bdot);
 MP_DEFINE_CONST_FUN_OBJ_2(ulab_controller_cholesky_obj, ulab_controller_cholesky);
 // MP_DEFINE_CONST_FUN_OBJ_KW(ulab_controller_MEKFstep_obj, 10, ulab_controller_MEKFstep);
 MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(ulab_controller_MEKFstep_obj, 10, 10, ulab_controller_MEKFstep);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(ulab_get_magnetic_field_obj, 2, 2, ulab_get_magnetic_field);
+MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(ulab_get_magnetic_field_series_obj, 4, 4, ulab_get_magnetic_field_series);
 
 // This is for functions of the form Array.function(other Array)
 // ( matrix.do() )
@@ -70,6 +74,7 @@ STATIC const mp_rom_map_elem_t ulab_ndarray_locals_dict_table[] = {
     // Stanford student stuff
     { MP_ROM_QSTR(MP_QSTR_bdot), MP_ROM_PTR(&ulab_controller_bdot_obj) },
     { MP_ROM_QSTR(MP_QSTR_cholesky), MP_ROM_PTR(&ulab_controller_cholesky_obj) },
+
 };
 
 STATIC MP_DEFINE_CONST_DICT(ulab_ndarray_locals_dict, ulab_ndarray_locals_dict_table);
@@ -104,6 +109,8 @@ STATIC const mp_rom_map_elem_t ulab_globals_table[] = {
 
     // Stanford PyCubed stuff
     { MP_ROM_QSTR(MP_QSTR_MEKFstep), MP_ROM_PTR(&ulab_controller_MEKFstep_obj) },  
+    { MP_ROM_QSTR(MP_QSTR_get_magnetic_field), MP_ROM_PTR(&ulab_get_magnetic_field_obj) },
+    { MP_ROM_QSTR(MP_QSTR_get_magnetic_field_series), MP_ROM_PTR(&ulab_get_magnetic_field_series_obj) },
 
     //class constants
     { MP_ROM_QSTR(MP_QSTR_uint8), MP_ROM_INT(NDARRAY_UINT8) },

@@ -376,6 +376,8 @@ SRC_SHARED_MODULE_ALL = \
 	ulab/ndarray.c \
 	ulab/linalg.c \
 	ulab/controller.c \
+	ulab/get_magnetic_field.c\
+	ulab/get_magnetic_field_series.c\
 	network/__init__.c \
 
 # All possible sources are listed here, and are filtered by SRC_PATTERNS.
